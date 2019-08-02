@@ -25,9 +25,9 @@ router.get('/posts', async (req, res) => {
       const posts = await db.findById(req.params.id);
   
       if (posts) {
-        res.status(200).json(posts);
+        res.status(201).json(posts);
       } else {
-        res.status(404).json({ message: 'The post with the specified ID does not exist' });
+        res.status(400).json({ message: 'Please provide title and contents for the post.' });
       }
     } catch (error) {
       // log error to database
@@ -61,10 +61,10 @@ router.get('/posts', async (req, res) => {
 
   router.post('/posts', async (req, res) => {
     const postInfo = {title , content} = req.body
-    console.log(postInfo)
     try {
       const post = await db.insert(postInfo);
     if (post) {
+      console.log(postInfo)
         res.status(201).json(post);
  } else {
      res.status(404).json({message: 'There was an error while saving the post to the database'})
@@ -114,6 +114,25 @@ router.get('/posts', async (req, res) => {
       console.log(error);
       res.status(500).json({
         message: 'Error removing the post',
+      });
+    }
+  });
+
+  // UPDATE 
+
+  router.put('/posts/:id', async (req, res) => {
+    try {
+      const post = await db.update(req.params.id, req.body);
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({ message: 'The post could not be found' });
+      }
+    } catch (error) {
+      // log error to database
+      console.log(error);
+      res.status(500).json({
+        message: 'Error updating the post',
       });
     }
   });
