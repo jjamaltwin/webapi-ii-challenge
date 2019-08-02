@@ -1,13 +1,11 @@
-// Setup and Endpoints 
-
 const express = require('express');
-const HubsRouter = require('./data/hubs/hubs-router');
 const server = express();
+const DataRouter = require('./Database/db-router');
 
 
 
 server.use(express.json());
-server.use('/api/hubs', HubsRouter);
+server.use('/api', DataRouter);
 
 server.get('/', (req, res) => {
   res.send(`
@@ -15,7 +13,5 @@ server.get('/', (req, res) => {
     <p>Welcome to the Lambda Database API</p>
   `);
 });
-
-
 
 module.exports = server;
